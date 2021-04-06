@@ -19,7 +19,7 @@ public class RabbitMqService {
 	 */
 	public void sendViaTopicExchange(String message) {
 		// convertAndSend takes the exchange name, routing-key, and the message
-		amqpTemplate.convertAndSend(RabbitMqConfig.topicExchangeName, "demo.test", "this is a test");
+		amqpTemplate.convertAndSend(RabbitMqConfig.topicExchangeName, "demo.test", message);
 	}
 
 	/**
@@ -31,6 +31,24 @@ public class RabbitMqService {
 		Message sysErrMsg = MessageBuilder.withBody(message.getBytes()).setHeader("testId", "123")
 				.setHeader("anotherId", "another123").build();
 		amqpTemplate.convertAndSend(RabbitMqConfig.headerExchangeName, "header.#", sysErrMsg);
+
+	}
+	
+	/**
+	 * sends messages via Direct exchange
+	 * @param message
+	 */
+	public void sendViaDirectExchange(String message) {
+		amqpTemplate.convertAndSend(RabbitMqConfig.directExchangeName, "direct", message);
+
+	}
+	
+	/**
+	 * sends messages via Fanout exchange
+	 * @param message
+	 */
+	public void sendViaFanoutExchange(String message) {
+		amqpTemplate.convertAndSend(RabbitMqConfig.fanoutExchangeName," " ,message);
 
 	}
 

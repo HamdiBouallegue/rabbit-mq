@@ -32,12 +32,26 @@ public class MqController {
 		return ResponseEntity.ok().body("Success");
 	}
 	
-//	@RabbitListener(queues = "${app.rabbitmq.queue}")
-//	/**
-//	 * recive messages from rabbitMq queue
-//	 * @param incomingMessage
-//	 */
-//	public void recievedMessage(String incomingMessage) {
-//		System.out.println("Recieved Message From RabbitMQ: " + incomingMessage);
-//	}
+	@PostMapping(value = "/send-direct")
+	public ResponseEntity<String> sendDirect() throws IOException {
+		String message = "this is a direct exchange demo";
+		rabbitMqService.sendViaDirectExchange(message);
+		return ResponseEntity.ok().body("Success");
+	}
+	
+	@PostMapping(value = "/send-fanout")
+	public ResponseEntity<String> sendFanout() throws IOException {
+		String message = "this is a fanout exchange demo";
+		rabbitMqService.sendViaFanoutExchange(message);
+		return ResponseEntity.ok().body("Success");
+	}
+	
+	@RabbitListener(queues = "${app.rabbitmq.queue}")
+	/**
+	 * recive messages from rabbitMq queue
+	 * @param incomingMessage
+	 */
+	public void recievedMessage(String incomingMessage) {
+		System.out.println("Recieved Message From RabbitMQ: " + incomingMessage);
+	}
 }
